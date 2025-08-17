@@ -219,6 +219,7 @@ class PullDownButton extends StatefulWidget {
     this.navigator,
     this.useRootNavigator = false,
     this.routeSettings,
+    this.requestFocus
   });
 
   /// Called when the button is pressed to create the items to show in the menu.
@@ -361,6 +362,8 @@ class PullDownButton extends StatefulWidget {
   /// See [RouteSettings] for details.
   final RouteSettings? routeSettings;
 
+  final bool? requestFocus;
+
   /// Default animation builder for [animationBuilder].
   ///
   /// If [state] is [PullDownButtonAnimationState.opened], apply opacity
@@ -426,6 +429,7 @@ class _PullDownButtonState extends State<PullDownButton> {
       navigator: widget.navigator,
       useRootNavigator: widget.useRootNavigator,
       routeSettings: widget.routeSettings,
+        requestFocus: widget.requestFocus
     );
 
     if (!mounted) return;
@@ -517,6 +521,7 @@ Future<void> showPullDownMenu({
   NavigatorState? navigator,
   bool useRootNavigator = false,
   RouteSettings? routeSettings,
+  bool? requestFocus
 }) async {
   if (items.isEmpty) return;
 
@@ -536,6 +541,7 @@ Future<void> showPullDownMenu({
     navigator: navigator,
     useRootNavigator: useRootNavigator,
     routeSettings: routeSettings,
+      requestFocus: requestFocus
   );
 
   if (action != null) {
@@ -561,20 +567,22 @@ Future<VoidCallback?> _showMenu<VoidCallback>({
   required NavigatorState? navigator,
   required bool useRootNavigator,
   required RouteSettings? routeSettings,
+  required bool? requestFocus
 }) {
-  final useCustomNavigator = navigator != null;
+  // final useCustomNavigator = navigator != null;
 
-  navigator ??= Navigator.of(context, rootNavigator: useRootNavigator);
+  navigator = Navigator.of(context, rootNavigator: useRootNavigator);
 
   return navigator.push<VoidCallback>(
     PullDownMenuRoute(
+      requestFocus: requestFocus,
       buttonRect: buttonRect,
       items: items,
       barrierLabel: _barrierLabel(context),
       routeTheme: routeTheme,
       menuPosition: menuPosition,
       capturedThemes: InheritedTheme.capture(
-        from: useCustomNavigator ? navigator.context : context,
+        from: context,
         to: navigator.context,
       ),
       hasLeading: hasLeading,

@@ -28,6 +28,7 @@ class PullDownMenuRoute<VoidCallback> extends PopupRoute<VoidCallback> {
     required this.menuOffset,
     required this.scrollController,
     required super.settings,
+    required super.requestFocus
   });
 
   /// Items to show in the [RoutePullDownMenu] created by this route.
